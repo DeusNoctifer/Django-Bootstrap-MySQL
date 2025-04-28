@@ -1,0 +1,2 @@
+django==5.1.7
+mysql-connector-python==9.3.0
