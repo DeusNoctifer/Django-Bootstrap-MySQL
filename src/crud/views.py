@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 def sign_in(request):
     
     if request.method == 'GET':
-        return render(request, 'sign_in.html')
+        return render(request, 'sign-in.html')
     else:
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -15,7 +15,7 @@ def sign_in(request):
 
         if user is None:
             messages.error(request, '¡Correo y/o Contraseña Incorrectos!')
-            return render(request, 'sign_in.html')
+            return render(request, 'sign-in.html')
 
         else:
             login(request, user)
