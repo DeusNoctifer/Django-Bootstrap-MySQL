@@ -30,4 +30,4 @@ class ProductosCategoria(models.Model):
     
     class Meta:
         db_table = 'productoscategoria'
-        unique_together = ('Productos', 'Categoria')  # Corregido para que coincida con los nombres de campos
+        unique_together = ('Productos', 'Categoria')

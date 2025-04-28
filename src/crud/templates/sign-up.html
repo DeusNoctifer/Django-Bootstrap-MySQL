@@ -1,0 +1,64 @@
+<!-- filepath: c:\Django-Bootstrap-MySQL\src\crud\templates\sign-up.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Registrarse</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg p-4" style="width: 500px; border-radius: 15px;">
+    <div class="text-center mb-4">
+      <i class="fa-solid fa-user-plus fs-1 text-primary"></i>
+      <h3 class="fw-bold mt-2">Crear Cuenta</h3>
+    </div>
+    <form method="post" action="{% url 'sign_up' %}">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="username" class="form-label">Usuario</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu usuario"
+            required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="first_name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Ingresa tu nombre">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="last_name" class="form-label">Apellido</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Ingresa tu apellido">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Crea una contraseña"
+            required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="password_confirm" class="form-label">Confirmar Contraseña</label>
+          <input type="password" class="form-control" id="password_confirm" name="password_confirm"
+            placeholder="Confirma tu contraseña" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+    </form>
+    <div class="text-center mt-3">
+      <p>¿Ya tienes una cuenta? <a href="{% url 'sign_in' %}" class="text-decoration-none text-primary">Inicia Sesión</a></p>
+    </div>
+  </div>
+</body>
+
+</html>

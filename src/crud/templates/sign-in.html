@@ -1,5 +1,6 @@
+<!-- filepath: c:\Django-Bootstrap-MySQL\src\crud\templates\sign-in.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <title>Iniciar Sesión</title>
@@ -11,49 +12,34 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="bg-info d-flex justify-content-center align-items-center vh-100">
-  <div class="bg-white p-5 rounded-1 text-secondary shadow">
-    <div class="d-flex justify-content-center">
-      <i class="fa-solid fa-circle-user fs-1"></i>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-lg p-4" style="width: 400px; border-radius: 15px;">
+    <div class="text-center mb-4">
+      <i class="fa-solid fa-circle-user fs-1 text-primary"></i>
+      <h3 class="fw-bold mt-2">Iniciar Sesión</h3>
     </div>
-    <div class="text-center fs-1 fw-bold">Login</div>
-    <div class="input-group mt-4">
-      <div class="input-group-text bg-info">
-        <i class="fa-solid fa-user"></i>
+    <form method="post" action="{% url 'sign_in' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuario</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu usuario" required>
       </div>
-      <input class="form-control bg-light" type="text" placeholder="Username" />
-    </div>
-    <div class="input-group mt-1">
-      <div class="input-group-text bg-info">
-        <i class="fa-solid fa-lock"></i>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña"
+          required>
       </div>
-      <input class="form-control bg-light" type="password" placeholder="Password" />
-    </div>
-    <div class="d-flex justify-content-around mt-1">
-      <div class="d-flex align-items-center gap-1">
-        <input class="form-check-input" type="checkbox" />
-        <div class="pt-1" style="font-size: 0.9rem">Remember me</div>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <input type="checkbox" id="recuerdame" name="recuerdame">
+          <label for="recuerdame" class="form-check-label">Recuérdame</label>
+        </div>
+        <a href="#" class="text-decoration-none text-primary">¿Olvidaste tu contraseña?</a>
       </div>
-      <div class="pt-1">
-        <a href="#" class="text-decoration-none text-info fw-semibold fst-italic" style="font-size: 0.9rem">Forgot your
-          password?</a>
-      </div>
-    </div>
-    <div class="btn btn-info text-white w-100 mt-4 fw-semibold shadow-sm">
-      Login
-    </div>
-    <div class="d-flex gap-1 justify-content-center mt-1">
-      <div>Don't have an account?</div>
-      <a href="#" class="text-decoration-none text-info fw-semibold">Register</a>
-    </div>
-    <div class="p-3">
-      <div class="border-bottom text-center" style="height: 0.9rem">
-        <span class="bg-white px-3">or</span>
-      </div>
-    </div>
-    <div class="btn d-flex gap-2 justify-content-center border mt-3 shadow-sm">
-      <i class="fa-brands fa-google"></i>
-      <div class="fw-semibold text-secondary">Continue with Google</div>
+      <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+    </form>
+    <div class="text-center mt-3">
+      <p>¿No tienes una cuenta? <a href="{% url 'sign_up' %}" class="text-decoration-none text-primary">Regístrate</a></p>
     </div>
   </div>
 </body>

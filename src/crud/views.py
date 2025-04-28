@@ -9,13 +9,13 @@ def sign_in(request):
     if request.method == 'GET':
         return render(request, 'sign-in.html')
     else:
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is None:
             messages.error(request, '¡Correo y/o Contraseña Incorrectos!')
-            return render(request, 'sign-in.html')
+            return render(request, 'sign-up.html')
 
         else:
             login(request, user)
@@ -39,11 +39,11 @@ def sign_up(request):
 
         if not username or not email or not password:
             messages.error(request, 'Usuario, email y contraseña son obligatorios')
-            return render(request, 'sign_up.html')
+            return render(request, 'sign-up.html')
             
         if password != password_confirm:
             messages.error(request, 'Las contraseñas no coinciden')
-            return render(request, 'sign_up.html')
+            return render(request, 'sign-up.html')
             
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Este nombre de usuario ya está registrado')
@@ -51,7 +51,7 @@ def sign_up(request):
             
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Este email ya está registrado')
-            return render(request, 'sign_up.html')
+            return render(request, 'sign-up.html')
         
         try:
             user = User.objects.create_user(
@@ -70,6 +70,9 @@ def sign_up(request):
                 
         except Exception as e:
             messages.error(request, f'Error al registrar: {str(e)}')
-            return render(request, 'sign_up.html')
+            return render(request, 'sign-up.html')
 
-    return render(request, 'sign_up.html')
+    return render(request, 'sign-up.html')
+
+def index(request):
+    return render(request, 'index.html')
