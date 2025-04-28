@@ -30,7 +30,6 @@ def sign_in(request):
 
 def sign_up(request):
     if request.method == 'POST':
-        # Obtener todos los campos del formulario
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -38,7 +37,6 @@ def sign_up(request):
         first_name = request.POST.get('first_name', '')
         last_name = request.POST.get('last_name', '')
 
-        # Validaciones básicas
         if not username or not email or not password:
             messages.error(request, 'Usuario, email y contraseña son obligatorios')
             return render(request, 'sign_up.html')
@@ -56,7 +54,6 @@ def sign_up(request):
             return render(request, 'sign_up.html')
         
         try:
-            # Crear el nuevo usuario con todos los campos
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -65,7 +62,6 @@ def sign_up(request):
                 last_name=last_name
             )
             
-            # Autenticar y loguear al usuario
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
