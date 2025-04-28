@@ -1,1 +1,11 @@
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+# Migraciones
+
+src/*/migrations/*.py
+!src/*/migrations/__init__.py
+
 env
