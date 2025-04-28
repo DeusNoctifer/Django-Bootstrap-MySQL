@@ -8,4 +8,7 @@ __pycache__/
 src/*/migrations/*.py
 !src/*/migrations/__init__.py
 
+# Virtual Enviroment
+
 env
+.env
