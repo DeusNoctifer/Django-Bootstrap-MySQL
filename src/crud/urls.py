@@ -12,3 +12,4 @@ urlpatterns = [
     path('agregar_productos', views.agregar_productos, name='agregar_productos'),
     path('actualizar_producto/<str:idProducto>', views.actualizar_producto, name='actualizar_producto'),
 
+]
