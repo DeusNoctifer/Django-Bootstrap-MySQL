@@ -38,15 +38,16 @@
       </div>
       <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
     </form>
-    <div class="text-center mt-3">
-      <p>¿No tienes una cuenta? <a href="{% url 'sign_up' %}" class="text-decoration-none text-primary">Regístrate</a></p>
-    </div>
     {% load socialaccount %}
     <a href="{% provider_login_url 'google' %}" class="text-decoration-none">
       <button class="btn btn-secondary w-100 text-light border-0 p-2">
         <span>Inicia Sesión con Google</span>
       </button>
     </a>
+    <div class="text-center mt-3">
+      <p>¿No tienes una cuenta? <a href="{% url 'sign_up' %}" class="text-decoration-none text-primary">Regístrate</a></p>
+    </div>
+
 
   </div>
 </body>
