@@ -1,7 +1,15 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required, user_passes_test
+from .models import Productos
+
+
+
+def es_admin(user):
+    return user.is_authenticated and user.is_staff
 
 # Create your views here.
 def sign_in(request):
@@ -15,7 +23,7 @@ def sign_in(request):
 
         if user is None:
             messages.error(request, '¡Correo y/o Contraseña Incorrectos!')
-            return render(request, 'sign-up.html')
+            return render(request, 'sign-in.html')
 
         else:
             login(request, user)
@@ -75,4 +83,82 @@ def sign_up(request):
     return render(request, 'sign-up.html')
 
 def index(request):
-    return render(request, 'index.html')
+    # Verificar si el usuario es administrador
+    if request.user.is_staff:
+        # Obtener todos los productos
+        productos = Productos.objects.all()
+        context = {
+            'productos': productos
+        }
+        
+        if request.method == 'POST':
+            id = request.POST.get('producto_id')
+            producto = Productos.objects.get(id=id)
+            producto.Estado = 0
+            producto.save()
+            
+        return render(request, 'index.html', context)
+    else:
+        # Si no es administrador, mostrar una vista básica
+        return render(request, 'index.html')
+    
+
+@user_passes_test(es_admin, login_url='index')
+def agregar_productos(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        cantidad = request.POST.get('cantidad')
+        valor_venta = request.POST.get('valor_venta')
+        descripcion = request.POST.get('descripcion')
+        
+        if nombre and cantidad and valor_venta and descripcion:
+            producto = Productos(
+                Nombre=nombre,
+                Cantidad=cantidad,
+                ValorVenta=valor_venta,
+                Descripcion=descripcion,
+                Estado=1
+            )
+            producto.save()
+            messages.success(request, 'Producto agregado exitosamente')
+            return redirect('index')
+        else:
+            messages.error(request, 'Todos los campos son obligatorios')
+    
+    return render(request, 'agregar_productos.html')   
+
+
+@user_passes_test(es_admin, login_url='index')
+def eliminar(request, idProducto):
+    producto = get_object_or_404(Productos, id=idProducto)
+    producto.delete()
+    return redirect('index')
+
+@user_passes_test(es_admin, login_url='index')
+def actualizar_producto(request, idProducto):
+    producto = get_object_or_404(Productos, id=idProducto)
+    
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        cantidad = request.POST.get('cantidad')
+        valor_venta = request.POST.get('valor_venta')
+        descripcion = request.POST.get('descripcion')
+        Estado = request.POST.get('Estado')
+        
+        if nombre and cantidad and valor_venta and descripcion and Estado:
+            producto.Nombre = nombre
+            producto.Cantidad = cantidad
+            producto.ValorVenta = valor_venta
+            producto.Descripcion = descripcion
+            producto.Estado = Estado
+            producto.save()
+            messages.success(request, 'Producto actualizado exitosamente')
+            return redirect('index')
+        else:
+            messages.error(request, 'Todos los campos son obligatorios')
+    
+    context = {
+        'producto': producto
+    }
+    return render(request, 'actualizar_producto.html', context)
+
