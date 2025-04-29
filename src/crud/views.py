@@ -1,9 +1,16 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect, render
+
+from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required, user_passes_test
+from .models import Productos
+from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q  # Import para consultas OR
+
+
+def es_admin(user):
+    return user.is_authenticated and user.is_staff
 
 def sign_up(request):
     if request.method == 'POST':
@@ -83,16 +90,82 @@ def sign_in(request):
             return redirect('index')
 
 def index(request):
-    if request.user.is_authenticated:
+    # Verificar si el usuario es administrador
+    if request.user.is_staff:
+        # Obtener todos los productos
+        productos = Productos.objects.all()
+        context = {
+            'productos': productos
+        }
+        
+        if request.method == 'POST':
+            id = request.POST.get('producto_id')
+            producto = Productos.objects.get(id=id)
+            producto.Estado = 0
+            producto.save()
+            
+        return render(request, 'index.html', context)
+    else:
+        # Si no es administrador, mostrar una vista básica
         return render(request, 'index.html')
-    else:
-        return redirect('sign_in')
+    
 
-def sign_out(request):
-    if request.user.is_authenticated:
-        logout(request)
-        messages.success(request, '¡Sesión cerrada exitosamente!')
-    else:
-        messages.error(request, 'No hay ninguna sesión activa.')
+@user_passes_test(es_admin, login_url='index')
+def agregar_productos(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        cantidad = request.POST.get('cantidad')
+        valor_venta = request.POST.get('valor_venta')
+        descripcion = request.POST.get('descripcion')
+        
+        if nombre and cantidad and valor_venta and descripcion:
+            producto = Productos(
+                Nombre=nombre,
+                Cantidad=cantidad,
+                ValorVenta=valor_venta,
+                Descripcion=descripcion,
+                Estado=1
+            )
+            producto.save()
+            messages.success(request, 'Producto agregado exitosamente')
+            return redirect('index')
+        else:
+            messages.error(request, 'Todos los campos son obligatorios')
+    
+    return render(request, 'agregar_productos.html')   
 
-    return redirect('sign_in')
+
+@user_passes_test(es_admin, login_url='index')
+def eliminar(request, idProducto):
+    producto = get_object_or_404(Productos, id=idProducto)
+    producto.delete()
+    return redirect('index')
+
+@user_passes_test(es_admin, login_url='index')
+def actualizar_producto(request, idProducto):
+    producto = get_object_or_404(Productos, id=idProducto)
+    
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        cantidad = request.POST.get('cantidad')
+        valor_venta = request.POST.get('valor_venta')
+        descripcion = request.POST.get('descripcion')
+        Estado = request.POST.get('Estado')
+        
+        if nombre and cantidad and valor_venta and descripcion and Estado:
+            producto.Nombre = nombre
+            producto.Cantidad = cantidad
+            producto.ValorVenta = valor_venta
+            producto.Descripcion = descripcion
+            producto.Estado = Estado
+            producto.save()
+            messages.success(request, 'Producto actualizado exitosamente')
+            return redirect('index')
+        else:
+            messages.error(request, 'Todos los campos son obligatorios')
+    
+    context = {
+        'producto': producto
+    }
+    return render(request, 'actualizar_producto.html', context)
+

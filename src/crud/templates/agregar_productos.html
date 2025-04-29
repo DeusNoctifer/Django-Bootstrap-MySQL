@@ -1,0 +1,64 @@
+<!-- filepath: c:\Django-Bootstrap-MySQL\src\crud\templates\AgregarProductos.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <title>Agregar Producto</title>
+  <meta charset="UTF-8">
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .btn {
+      border-radius: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card p-4">
+    <h2 class="text-center mb-4">Agregar Producto</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre del Producto</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto" required>
+      </div>
+      <div class="mb-3">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad" required>
+      </div>
+      <div class="mb-3">
+        <label for="valor_venta" class="form-label">Valor de Venta</label>
+        <input type="number" class="form-control" id="valor_venta" name="valor_venta" placeholder="Ingrese el valor de venta" required>
+      </div>
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Ingrese una descripción" required></textarea>
+      </div>
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'index' %}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Agregar Producto</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

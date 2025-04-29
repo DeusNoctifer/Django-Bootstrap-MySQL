@@ -5,6 +5,7 @@ class Productos(models.Model):
     Cantidad = models.SmallIntegerField()
     ValorVenta = models.IntegerField()
     Descripcion = models.CharField(max_length=150)
+    Estado = models.IntegerField()
     
     class Meta:
         db_table = 'productos'
